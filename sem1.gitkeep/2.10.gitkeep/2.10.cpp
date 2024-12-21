@@ -15,4 +15,5 @@ int main()
 		if (tmp > max) { max = tmp; }
 	}
 	cout << "Максимальный элемент: " << max << endl;
+	return 0;
 }
