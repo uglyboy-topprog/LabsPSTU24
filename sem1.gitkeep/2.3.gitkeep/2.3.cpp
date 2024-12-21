@@ -11,4 +11,5 @@ int main() {
 		}
 	}s += t;
 	cout << s << endl;
+	return 0;
 }
