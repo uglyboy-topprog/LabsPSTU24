@@ -11,7 +11,7 @@ int main() {
 	max = *ptr;
 	min = *ptr;
 
-	for (int i = 2; i <= n; i++) 
+	for (int i = 1; i <= n; i++) 
 	{
 		cin >> *ptr;
 		if (*ptr > max) { max = *ptr; }
