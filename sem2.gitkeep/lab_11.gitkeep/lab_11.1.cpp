@@ -3,27 +3,32 @@
 
 using namespace std;
 
-struct Node {
+struct Node 
+{
 	char data;
 	Node* pointer_to_next_node = nullptr;
 };
 
-struct  List {
+struct  List 
+{
 	Node* head_node = nullptr;
 	Node* tail_node = nullptr;
 };
 
 
 
-void pushBack(List& list, const char& data) {
+void pushBack(List& list, const char& data) 
+{
 	Node* new_node = new Node;
 	new_node->data = data;
 
-	if (list.head_node == nullptr) {
+	if (list.head_node == nullptr) 
+	{
 		list.head_node = new_node;
 		list.tail_node = new_node;
 	}
-	else {
+	else 
+	{
 
 		list.tail_node->pointer_to_next_node = new_node;
 
@@ -32,7 +37,8 @@ void pushBack(List& list, const char& data) {
 }
 
 
-void remove(List& list, char& key) {
+void remove(List& list, char& key) 
+{
 	Node* current_node = new Node;
 	current_node->pointer_to_next_node = list.head_node;
 	bool flag = false;
@@ -53,14 +59,16 @@ void remove(List& list, char& key) {
 				list.tail_node = current_node;
 				current_node->pointer_to_next_node = nullptr;
 			}
-			else {
+			else 
+			{
 				tmp = current_node->pointer_to_next_node;
 				current_node->pointer_to_next_node = tmp->pointer_to_next_node;
 
 			}
 			delete tmp;
 		}
-		else {
+		else 
+		{
 			current_node = current_node->pointer_to_next_node;
 			flag = true;
 		}
@@ -88,6 +96,7 @@ void popFront(List& list) {
 }
 
 void print(List& list)
+
 {
 
 	Node* current_node = list.head_node;
@@ -95,7 +104,8 @@ void print(List& list)
 	{
 		cout << "Ваш список оказался пустым" << endl;
 	}
-	else {
+	else 
+	{
 		cout << "Ваш список: " << endl;
 		while (current_node != nullptr)
 		{
@@ -106,14 +116,17 @@ void print(List& list)
 	}
 }
 
-int main() {
+int main() 
+{
 	system("chcp 1251");
 	int n;
 	cout << "Введите количество элементов списка: " << endl;
 	cin >> n;
 
 	List list;
-	for (int i = 0; i < n; i++) {
+
+	for (int i = 0; i < n; i++)
+		{
 		char Char;
 		cout << "Введите символ: " << endl;
 		cin >> Char;
@@ -121,7 +134,8 @@ int main() {
 	}
 
 	Node* current_node = list.head_node;
-	while (current_node != nullptr) {
+	while (current_node != nullptr)
+	{
 
 		cout << current_node->data << ' ';
 
@@ -136,7 +150,9 @@ int main() {
 	print(list);
 	cout << "Сколько элементов добавить в конец списка: " << endl;
 	cin >> n;
-	for (int i = 0; i < n; i++) {
+
+	for (int i = 0; i < n; i++)
+		{
 		char Char;
 		cout << "Введите символ: " << endl;
 		cin >> Char;
