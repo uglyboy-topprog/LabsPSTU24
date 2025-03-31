@@ -1,131 +1,153 @@
-﻿#include <iostream>
-#include <fstream>
+#include <iostream>
 using namespace std;
+
 struct Node
 {
     char data;
     Node* next = nullptr;
-    Node* prev = nullptr;
 };
 
-struct List {
-    Node* head = nullptr;
-    Node* tail = nullptr;
-};
-
-void pushBack(List& list, const char& data)
+struct Stack
 {
-    Node* new_node = new Node;
-    new_node->data = data;
-    if (list.head == nullptr)
+    Node* head = nullptr;
+    int size = 0;
+
+    void pushFront(char data)
     {
+        Node* node = new Node;
+        node->data = data;
 
-        list.head = new_node;
-        list.tail = new_node;
-    }
-    else {
-        list.tail->next = new_node;
-        new_node->prev = list.tail;
-        list.tail = new_node;
-    }
-}
-
-void pushFront(List& list, const char& data) {
-    Node* new_node = new Node;
-    new_node->data = data;
-    if (list.head == nullptr)
-    {
-
-        list.head = new_node;
-        list.tail = new_node;
-    }
-    else {
-        new_node->next = list.head;
-        list.head->prev = new_node;
-        list.head = new_node;
-    }
-}
-
-void print(List& list) {
-    Node* current_node = list.head;
-    if (current_node == nullptr)
-    {
-        cout << "Ваш список оказался пустым" << endl;
-    }
-    else {
-        cout << "Ваш список: " << endl;
-        while (current_node != nullptr)
+        if (head == nullptr)
+            head = node;
+        else
         {
-            cout << current_node->data << " ";
-            current_node = current_node->next;
+            node->next = head;
+            head = node;
         }
-        cout << endl;
+
+        size++;
     }
-}
 
-
-void remove(List& list, char& key) {
-    Node* current_node = new Node;
-    current_node->next = list.head;
-    while (current_node != nullptr)
+    void pushBack(char data)
     {
-        Node* tmp = current_node;
-        current_node = current_node->next;
-        if (tmp->data == key)
+        Stack* buffer = new Stack;
+
+        for (int i = 0; i < size; i++)
         {
-            if (tmp->next == nullptr && tmp->prev == nullptr)
-            {
+            buffer->pushFront(head->data);
 
-                list.head = nullptr;
-                list.tail = nullptr;
-            }
-            else if (tmp == list.head)
-            {
-                list.head = tmp->next;
-                list.head->prev = nullptr;
-            }
-            else if (tmp == list.tail)
-            {
-                list.tail = tmp->prev;
-                list.tail->next = nullptr;
-            }
-            else {
-                tmp->prev->next = tmp->next;
-                tmp->next->prev = tmp->prev;
-            }
 
+            Node* tmp = head;
+            head = head->next;
             delete tmp;
         }
-    }
-}
 
-int main() {
+        size = 0;
+        pushFront(data);
+        Node* current = buffer->head;
+
+        for (int i = 0; i < buffer->size; i++)
+        {
+            pushFront(current->data);
+            current = current->next;
+        }
+
+        buffer->Clear();
+        delete buffer;
+    }
+
+    void print()
+    {
+        if (size == 0)
+            cout << "Ваш стек пуст" << endl;
+        else
+        {
+            cout << "Ваш стек:" << endl;
+
+            Node* current = head;
+
+            for (int i = 0; i < size; i++)
+            {
+                cout << current->data << " ";
+                current = current->next;
+            }
+
+            cout << endl;
+        }
+    }
+    void remove(char key)
+    {
+        Stack* buffer = new Stack;
+
+        for (int i = 0; i < size; i++)
+        {
+            if (head->data != key)
+                buffer->pushFront(head->data);
+
+
+            Node* tmp = head;
+            head = head->next;
+            delete tmp;
+        }
+
+        size = 0;
+        Node* current = buffer->head;
+
+        for (int i = 0; i < buffer->size; i++)
+        {
+
+            pushFront(current->data);
+            current = current->next;
+        }
+
+        buffer->Clear();
+        delete buffer;
+    }
+
+    void Clear()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            Node* tmp = head;
+            head = head->next;
+            delete tmp;
+        }
+
+        head = nullptr;
+
+        size = 0;
+    }
+};
+
+
+int main()
+{
     system("chcp 1251");
     int n;
-    cout << "Введите количество элементов списка: " << endl;
+    cout << "Введите количество элементов стека: " << endl;
     cin >> n;
-    List list;
+    Stack* stack = new Stack;
     for (int i = 0; i < n; i++) {
         char Char;
         cout << "Введите символ: " << endl;
         cin >> Char;
-        pushBack(list, Char);
+        stack->pushBack(Char);
     }
     cout << endl;
-    print(list);
+    stack->print();
     char key;
-    cout << "Введите символ, который нужно удалить: " << endl;
+    cout << "Введите какой элемент стека нужно удалить: " << endl;
     cin >> key;
-    remove(list, key);
-    print(list);
-    cout << "Введите сколько еще символов вы хотите добавить в конец списка: " << endl;
+    stack->remove(key);
+    stack->print();
+    cout << "Введите сколько элементов нужно добавить в стек: " << endl;
     cin >> n;
     for (int i = 0; i < n; i++) {
         char Char;
         cout << "Введите символ: " << endl;
         cin >> Char;
-        pushBack(list, Char);
+        stack->pushBack(Char);
     }
     cout << endl;
-    print(list);
+    stack->print();
 }
