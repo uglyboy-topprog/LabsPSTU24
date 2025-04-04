@@ -4,13 +4,13 @@ sem_1	+
 
 Lab_4	+
 
-Lab 5 + (new)
+Lab 5 + 
 
 Lab_6	+
 
 Sorting	+
 
-hanoi_tower + ( - блок-схема)
+hanoi_tower +
 
 8 queens	+
 
@@ -20,6 +20,10 @@ Lab_7.2	+
 
 Lab_10	+
 
-Lab_11 (all без блок-схем) (new)
+Lab_11 +
 
 Sorting methods ( Сортировка Шелла, Быстрая сортировка по Хоару, Многофазная и естественная сортировки) (new)
+
+Lab_9 (new)
+
+Searches (new)  
