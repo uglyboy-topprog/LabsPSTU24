@@ -27,3 +27,5 @@ Sorting methods ( Сортировка Шелла, Быстрая сортиро
 Lab_9 (new)
 
 Searches (new)  
+
+Idef0 (new)
