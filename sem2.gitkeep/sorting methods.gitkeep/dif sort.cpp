@@ -1,212 +1,249 @@
-﻿//естественное слияние
-#include <iostream> 
+﻿#include <iostream>
 using namespace std;
 
-void merge(int* v, int r, int t) 
+//Блочная сортировка
+void bucketSort(int array[], int size, int minValue, int maxValue) 
 {
-    int p = 1; //количество элементов в первой серии 
-    int k = 1; //количество элементов во второй серии 
-    int i = 0;
-    bool flag = false; //флажок для определения надобности второй серии  
+    int bucketCount = maxValue - minValue + 1;  // Количество блоков
 
-    while (v[i] <= v[i + 1] && i < r - 1) 
-    { //счетчик количества элементов 1 серии 
-        p++;
-        i++;
-    }
-    if (v[i] > v[i + 1] && i < r - 1) 
+    // Создаем блоки
+    int* buckets = new int[bucketCount];
+    for (int i = 0; i < bucketCount; i++) 
     {
-        i++;
-        flag = true;
-        while (v[i] <= v[i + 1] && i < r - 1) 
+        buckets[i] = 0;
+    }
+
+    // Считаем количество элементов в каждом блоке
+    for (int i = 0; i < size; i++) 
+    {
+        buckets[array[i] - minValue]++;
+    }
+
+    // Записываем элементы из блоков обратно в исходный массив
+    int index = 0;
+    for (int i = 0; i < bucketCount; i++) 
+    {
+        while (buckets[i] > 0)
         {
-            k++;
+            array[index++] = i + minValue;
+            buckets[i]--;
+        }
+    }
+
+    // Освобождаем память, выделенную для блоков
+    delete[] buckets;
+}
+
+// Сортировка подсчетом 
+void countingSort(int array[], int size, int minValue, int maxValue) 
+{
+    int range = maxValue - minValue + 1;  // Диапазон чисел
+    int* count = new int[range] {0};  // Массив для подсчета частоты
+
+    // Подсчет частоты встречаемости чисел
+    for (int i = 0; i < size; i++) 
+    {
+        count[array[i] - minValue]++;
+    }
+
+    int index = 0;
+    // Перезапись отсортированных чисел в исходный массив
+    for (int i = 0; i < range; i++) 
+    {
+        while (count[i] > 0) 
+        {
+            array[index++] = i + minValue;
+            count[i]--;
+        }
+    }
+
+    // Освобождение памяти
+    delete[] count;
+}
+
+// Сортировка слиянием
+void merge(int array[], int left, int middle, int right) 
+{
+    int i, j, k;
+    int n1 = middle - left + 1;
+    int n2 = right - middle;
+
+    // Создаем временные массивы
+    int* L = new int[n1];
+    int* R = new int[n2];
+
+    // Копируем данные во временные массивы L и R
+    for (i = 0; i < n1; i++) 
+    {
+        L[i] = array[left + i];
+    }
+    for (j = 0; j < n2; j++) 
+    {
+        R[j] = array[middle + 1 + j];
+    }
+
+    // Объединяем временные массивы L и R обратно в основной массив array[]
+    i = 0;  // Индекс первого подмассива
+    j = 0;  // Индекс второго подмассива
+    k = left;  // Индекс слияния подмассивов
+
+    while (i < n1 && j < n2) 
+    {
+        if (L[i] <= R[j]) 
+        {
+            array[k] = L[i];
             i++;
-        }
-    }
-    int num = i + 1;
-    int* a = new int[p]; //1 серия 
-    int* b = new int[k]; //2 серия 
-
-    for (int i = 0; i < p; i++) 
-    {
-        a[i] = v[i];
-    }
-
-    int g = 0;
-    if (flag == true) {
-        for (int i = p; i < p + k; i++) 
-        { //заполнение 2 серии 
-            b[g] = v[i];
-            g++;
-        }
-    }
-    int j = 0;
-    int l = 0;
-    if (flag == true) 
-    { //проверка на наличие второй надобности слияния 
-        for (int i = 0; i < num; i++) 
-        {
-            if ((a[l] < b[j] || j >= k) && l < p) 
-            {
-                v[i] = a[l];
-                l++;
-            }
-            else
-                if ((a[l] > b[j] || l >= p) && j < k) 
-                {
-                    v[i] = b[j];
-                    j++;
-                }
-                else
-                    if (a[l] == b[j] && j < k && l < p) 
-                    {
-                        v[i] = a[l];
-                        v[i + 1] = b[j];
-                        l++;
-                        j++;
-                        i++;
-                    }
-        }
-    }
-    delete[] a;
-    delete[] b;
-
-}
-void mergeSort(int* v, int r, int i) 
-{
-    if (i < r) {
-        merge(v, r, i); //функция сортировки 
-        mergeSort(v, r, i + 1); //рекурсия 
-    }
-}
-
-
-int main()
-{
-    system("chcp 1251");
-    int array[25] = { 1,2,3,4,5,5,5,5,5,5,0,0,0,0,0,3,3,3,3,4,5,3,1,1,1 };
-
-    cout << "Исходный массив: " << endl;
-    for (int i = 0; i < 25; i++) 
-    {
-        cout << array[i];
-    }
-    cout << endl;
-    mergeSort(array, 25, 0);
-    cout << "Отсортированный массив: " << endl;
-    for (int i = 0; i < 25; i++) 
-    {
-        cout << array[i];
-    }
-}
-
-
-
-
-
-
-//многофазная сортировка
-#include <iostream> 
-using namespace std;
-
-void merge(int arr[], int left, int mid, int right) 
-{
-    int i = left;
-    int j = mid + 1;
-    int k = 0;
-    int* temp = new int[right - left + 1];
-
-    while (i <= mid && j <= right) 
-    {
-        if (arr[i] <= arr[j]) 
-        {
-            temp[k++] = arr[i++];
         }
         else 
         {
-            temp[k++] = arr[j++];
+            array[k] = R[j];
+            j++;
         }
+        k++;
     }
 
-    while (i <= mid) 
+    // Копируем оставшиеся элементы L[], если таковые имеются
+    while (i < n1) 
     {
-        temp[k++] = arr[i++];
+        array[k] = L[i];
+        i++;
+        k++;
     }
 
-    while (j <= right) 
+    // Копируем оставшиеся элементы R[], если таковые имеются
+    while (j < n2) 
     {
-        temp[k++] = arr[j++];
+        array[k] = R[j];
+        j++;
+        k++;
     }
 
-    for (int p = 0; p < k; p++) {
-        arr[left + p] = temp[p];
-    }
-
-    delete[] temp; // освобождение памяти 
+    // Освобождаем память от временных массивов
+    delete[] L;
+    delete[] R;
 }
 
-void mergeSort(int arr[], int left, int right) 
+// Рекурсивная функция для сортировки слиянием
+void mergeSort(int array[], int left, int right) 
 {
     if (left < right) 
     {
-        int mid = left + (right - left) / 2;
+        int middle = left + (right - left) / 2;
 
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
+        // Рекурсивно сортируем две половины
+        mergeSort(array, left, middle);
+        mergeSort(array, middle + 1, right);
 
-        merge(arr, left, mid, right);
+        // Сливаем две половины
+        merge(array, left, middle, right);
     }
 }
 
-void multiPhaseSort(int arr[], int size) 
+//Быстрая по Ломуто
+// Функция для обмена двух элементов массива
+void swap(int& a, int& b) 
 {
-    int phaseSize = 1;
+    int temp = a;
+    a = b;
+    b = temp;
+}
 
-    while (phaseSize < size) 
+// Функция разделитель (поиск опорного элемента и перестановка элементов относительно него)
+int partition(int array[], int low, int high) 
+{
+    int pivot = array[high];  // Выбираем последний элемент массива как опорный
+    int i = (low - 1);  // Индекс для меньшего элемента
+
+    for (int j = low; j <= high - 1; j++) 
     {
-        int left = 0;
-
-        while (left < size - 1) 
+        // Если текущий элемент меньше или равен опорному, меняем элементы местами
+        if (array[j] <= pivot) 
         {
-            int mid = std::min(left + phaseSize - 1, size - 1);
-            int right = std::min(left + 2 * phaseSize - 1, size - 1);
-
-            merge(arr, left, mid, right);
-
-            left += 2 * phaseSize;
+            i++;
+            swap(array[i], array[j]);
         }
+    }
 
-        phaseSize *= 2;
+    swap(array[i + 1], array[high]);
+    return (i + 1);
+}
+
+// Рекурсивная функция сортировки
+void quickSort(int array[], int low, int high)
+{
+    if (low < high) 
+    {
+        // Индекс разделения
+        int pi = partition(array, low, high);
+
+        // Рекурсивные вызовы для сортировки подмассивов до и после разделителя
+        quickSort(array, low, pi - 1);
+        quickSort(array, pi + 1, high);
     }
 }
 
-int main() 
+int menu()
 {
+    cout << "\n1 - Блочная сортировка\n2 - Сортировка подсчетом\n3 - Сортировка слиянием\n4 - Быстрая по Ломуто\nВыберите сортировку ";
+    int n;
+    cin >> n;
+    return n;
+}
+
+
+
+int main() {
     system("chcp 1251");
-    int size;
+    int array[25] = { 2, 4, 3, 1, 0, 5, 5, 2, 3, 4, 1, 0, 5, 3, 2, 4, 1, 3, 0, 2, 4, 1, 5, 0, 3 };
+    int size = sizeof(array) / sizeof(array[0]);
+    int minValue = 0;  // Минимальное значение в массиве
+    int maxValue = 5;  // Максимальное значение в массиве
 
-    cout << "Введите размер массива: ";
-    cin >> size;
-
-    int* arr = new int[size];
-
-    cout << "Введите элементы массива: ";
+    cout << "Исходный массив: ";
     for (int i = 0; i < size; i++) 
     {
-        cin >> arr[i];
+        cout << array[i] << " ";
     }
 
-    multiPhaseSort(arr, size);
-
-    cout << "Отсортированный массив: ";
-    for (int i = 0; i < size; i++)
+    switch (menu()) 
+    {
+    case 1: 
+        bucketSort(array, size, minValue, maxValue);
+        cout << "Отсортированный массив: ";
+        for (int i = 0; i < size; i++) 
         {
-        cout << arr[i] << " ";
+            cout << array[i] << " ";
+        }
+        break;
+    case 2:
+        countingSort(array, size, minValue, maxValue);
+        cout << "Отсортированный массив: ";
+        for (int i = 0; i < size; i++) 
+        {
+            cout << array[i] << " ";
+        }
+        break;
+    case 3:
+        mergeSort(array, 0, size - 1);
+        cout << "Отсортированный массив: ";
+        for (int i = 0; i < size; i++) 
+        {
+            cout << array[i] << " ";
+        }
+        break;
+    case 4:
+        quickSort(array, 0, size - 1);
+        cout << "Отсортированный массив: ";
+        for (int i = 0; i < size; i++) 
+        {
+            cout << array[i] << " ";
+        }
+        break;
     }
+
     cout << endl;
 
-    delete[] arr; // освобождение памяти 
+    
 
     return 0;
 }
