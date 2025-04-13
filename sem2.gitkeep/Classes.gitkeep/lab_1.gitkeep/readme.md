@@ -67,21 +67,21 @@ Public
 s->name.
 
 
-**Класс описан следующим образом struct Student { string name; int group; ……… }; Объект класса определен следующим образом Student **s=new Student; Как можно обратиться к полю name объекта s?**
+***Класс описан следующим образом struct Student { string name; int group; ……… }; Объект класса определен следующим образом Student *s=new Student; Как можно обратиться к полю name объекта s?***
 
 s.name = "name".
 
 
-**Класс описан следующим образом class Student { string name; int group; ……. }; Объект класса определен следующим образом Student **s=new Student; Как можно обратиться к полю name объекта s?**
+**Класс описан следующим образом class Student { string name; int group; ……. }; Объект класса определен следующим образом Student *s=new Student; Как можно обратиться к полю name объекта s?***
 
 s->name.
 
-**Класс описан следующим образом class Student { string name; int group; public: ….. }; Объект класса определен следующим образом Student s; Как можно обратиться к полю name объекта s?**
+**Класс описан следующим образом class Student { string name; int group; public: ….. }; Объект класса определен следующим образом Student s; Как можно обратиться к полю name объекта s?***
 
 
 s.name
 
-**Класс описан следующим образом class Student { public: char** name; int group; ……… }; Объект класса определен следующим образом Student **s=new Student; Как можно обратиться к полю name объекта s?**
+***Класс описан следующим образом class Student { public: char* name; int group; ……… }; Объект класса определен следующим образом Student *s=new Student; Как можно обратиться к полю name объекта s?***
 
 
 s->name.
