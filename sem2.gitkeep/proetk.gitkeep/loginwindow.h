@@ -2,30 +2,29 @@
 #define LOGINWINDOW_H
 
 #include <QWidget>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QVBoxLayout>
-#include <QMessageBox>
+#include <QLabel> 
+#include "mainwindow.h"
 
-class LoginWindow : public QWidget
-{
+class AuthWindow;
+
+class LoginWindow : public QWidget {
     Q_OBJECT
 public:
-    explicit LoginWindow(QWidget *parent = nullptr);
-
-signals:
-    void authenticated();
+    LoginWindow(AuthWindow *parent = nullptr);
 
 private slots:
-    void loginUser();
+    void handleLogin();
+    void closeWindows();
 
 private:
-    QLabel *usernameLabel;
-    QLabel *passwordLabel;
     QLineEdit *usernameEdit;
     QLineEdit *passwordEdit;
     QPushButton *loginButton;
+    QLabel *errorLabel; 
+    MainWindow *mainWindow = nullptr;
+    AuthWindow *authWindow;
 };
 
 #endif // LOGINWINDOW_H
