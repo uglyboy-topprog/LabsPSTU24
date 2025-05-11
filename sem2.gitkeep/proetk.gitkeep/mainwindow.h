@@ -2,38 +2,24 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QStackedWidget>
-#include <QTranslator>
 #include <QLabel>
-#include <QPushButton>
-#include <QListWidget>
+#include <QComboBox>
 
+class DifficultyWindow; // Предварительное объявление вместо #include "difficultywindow.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-
+    MainWindow(QWidget *parent = nullptr);
     void showLanguageSelection();
-    void showDifficultySelection();
-    void showContentList();
 
 private slots:
-    void onLanguageSelected(const QString &lang);
-    void onDifficultySelected(int level);
-    void onButtonClicked(int buttonId);
+    void handleLanguageChoice(const QString &language);
 
 private:
-    void setupLanguagePage();
-    void setupDifficultyPage();
-    void setupContentPage(int difficultyLevel); // Изменили аргумент
-    QStackedWidget *stackedWidget;
-    QTranslator *translator;
-    QString username;
-    QWidget *contentPage;
-    QListWidget *listWidget;
-    //Ui::MainWindow *ui; // Удали эту строку!
+    QLabel *infoLabel;
+    QComboBox *languageChoice;
+    DifficultyWindow *difficultyWindow = nullptr;
 };
+
 #endif // MAINWINDOW_H
