@@ -2,29 +2,26 @@
 #define AUTHWINDOW_H
 
 #include <QWidget>
-#include <QVBoxLayout>
 #include <QPushButton>
+#include "registrationwindow.h"
+#include "loginwindow.h"
+#include "mainwindow.h"
 
-class LoginWindow;
-class RegistrationWindow;
-class MainWindow;
-
-class AuthWindow : public QWidget
-{
+class AuthWindow : public QWidget {
     Q_OBJECT
 public:
-    explicit AuthWindow(QWidget *parent = nullptr);
-    ~AuthWindow();
+    AuthWindow(QWidget *parent = nullptr);
 
 private slots:
-    void showLogin();
-    void showRegistration();
-    void showLanguageWindow();
+    void showLoginWindow();
+    void showRegistrationWindow();
 
 private:
-    LoginWindow *loginWindow = nullptr;
+    QPushButton *loginButton;
+    QPushButton *registrationButton;
     RegistrationWindow *registrationWindow = nullptr;
-    MainWindow *mainWindow = nullptr;
+    LoginWindow *loginWindow = nullptr;
+    MainWindow *mainWindow = nullptr; // Добавляем указатель
 };
 
 #endif // AUTHWINDOW_H
