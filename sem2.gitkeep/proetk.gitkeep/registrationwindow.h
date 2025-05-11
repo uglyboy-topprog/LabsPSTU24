@@ -2,31 +2,27 @@
 #define REGISTRATIONWINDOW_H
 
 #include <QWidget>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QMessageBox>
+#include "mainwindow.h"
 
-class RegistrationWindow : public QWidget
-{
+class AuthWindow;
+
+class RegistrationWindow : public QWidget {
     Q_OBJECT
 public:
-    explicit RegistrationWindow(QWidget *parent = nullptr);
-
-public:
-    void saveUserData( const QString &username,const QString &password, const QString &email);
+    RegistrationWindow(AuthWindow *parent = nullptr);
 
 private slots:
-    void registerUser();
+    void handleRegistration();
+    void closeWindows(); // Убедимся, что этот слот объявлен
 
 private:
-    QLabel *usernameLabel;
-    QLabel *passwordLabel;
-    QLabel *emailLabel;
     QLineEdit *usernameEdit;
     QLineEdit *passwordEdit;
-    QLineEdit *emailEdit;
     QPushButton *registerButton;
+    MainWindow *mainWindow = nullptr;
+    AuthWindow *authWindow;
 };
 
 #endif // REGISTRATIONWINDOW_H
