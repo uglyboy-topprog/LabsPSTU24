@@ -1,74 +1,75 @@
 #include "registrationwindow.h"
 #include <QVBoxLayout>
-#include <QRegularExpression>
+#include <QLabel>
+#include <QDebug>
+#include <QTimer>
 #include <QFile>
 #include <QTextStream>
-#include <QMessageBox>
-#include <QStandardPaths>
+#include "authwindow.h"
 
-RegistrationWindow::RegistrationWindow(QWidget *parent) : QWidget(parent)
-{
-    usernameLabel = new QLabel("Имя:", this);
-    passwordLabel = new QLabel("Пароль:", this);
-    emailLabel = new QLabel("Почта:", this);
-    usernameEdit = new QLineEdit(this);
-    passwordEdit = new QLineEdit(this);
-    emailEdit = new QLineEdit(this);
-    registerButton = new QPushButton("Регистрация", this);
-
-    passwordEdit->setEchoMode(QLineEdit::Password);
+RegistrationWindow::RegistrationWindow(AuthWindow *parent) : QWidget(parent), authWindow(parent) {
+    setWindowTitle("Регистрация");
+    setMinimumSize(200, 120);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(usernameLabel);
+    QLabel *titleLabel = new QLabel("Введите данные для регистрации", this);
+    titleLabel->setAlignment(Qt::AlignCenter); // Центрируем текст
+    usernameEdit = new QLineEdit(this);
+    usernameEdit->setPlaceholderText("Имя пользователя");
+    passwordEdit = new QLineEdit(this);
+    passwordEdit->setPlaceholderText("Пароль");
+    passwordEdit->setEchoMode(QLineEdit::Password);
+    registerButton = new QPushButton("Зарегистрироваться", this);
+
+    layout->addWidget(titleLabel);
     layout->addWidget(usernameEdit);
-    layout->addWidget(passwordLabel);
     layout->addWidget(passwordEdit);
-    layout->addWidget(emailLabel);
-    layout->addWidget(emailEdit);
     layout->addWidget(registerButton);
 
-    connect(registerButton, &QPushButton::clicked, this, &RegistrationWindow::registerUser);
+    setLayout(layout);
+    adjustSize();
+
+    connect(registerButton, &QPushButton::clicked, this, &RegistrationWindow::handleRegistration);
+
+    qDebug() << "RegistrationWindow создан";
 }
 
-void RegistrationWindow::registerUser()
-{
-    QString username = usernameEdit->text().trimmed();
-    QString password = passwordEdit->text().trimmed();
-    QString email = emailEdit->text().trimmed();
+void RegistrationWindow::handleRegistration() {
+    QString username = usernameEdit->text();
+    QString password = passwordEdit->text();
 
-    if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Пожалуйста, заполните все поля");
-        return;
-    }
+    qDebug() << "Попытка регистрации с именем:" << username << "и паролем:" << password;
 
-    // Регулярное выражение для проверки email
-        QRegularExpression re("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-        QRegularExpressionMatch match = re.match(email);
-
-        if (!match.hasMatch()) {
-            QMessageBox::warning(this, "Error", "Некорректный email");
-            return;
+    if (!username.isEmpty() && !password.isEmpty()) {
+        QFile file("users.txt");
+        if (file.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&file);
+            out << username << ":" << password << "\n";
+            file.close();
+            qDebug() << "Пользователь сохранён в users.txt";
+        } else {
+            qDebug() << "Не удалось открыть файл для записи";
         }
 
-        // Сохранение в файл
-        QString filePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "data.txt";
-            QFile file(filePath);
-
-            if (file.open(QIODevice::Append | QIODevice::Text)) {
-                QTextStream stream(&file);
-                stream << "Username: " << username << "\n";
-                stream << "Password: " << password << "\n";
-                stream << "Email: " << email << "\n\n";
-                file.close();
-
-                // Сообщение об успехе (с указанием пути):
-                QMessageBox::information(this, "Успех", "Данные сохранены в:\n" + filePath);
-            } else {
-                QMessageBox::warning(this, "Ошибка", "Не удалось сохранить файл!");
-            }
-
-    close();
+        qDebug() << "Регистрация успешна";
+        if (!mainWindow) {
+            mainWindow = new MainWindow(nullptr);
+            mainWindow->setAttribute(Qt::WA_QuitOnClose, true);
+        }
+        mainWindow->show();
+        mainWindow->raise();
+        mainWindow->activateWindow();
+        qDebug() << "MainWindow видимость:" << mainWindow->isVisible();
+        QTimer::singleShot(100, this, SLOT(closeWindows()));
+    } else {
+        qDebug() << "Пожалуйста, заполните все поля";
+    }
 }
 
-
-
+void RegistrationWindow::closeWindows() {
+    qDebug() << "Закрываем окна";
+    this->close();
+    if (authWindow) {
+        authWindow->hide();
+    }
+}
