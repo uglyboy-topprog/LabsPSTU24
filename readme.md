@@ -33,3 +33,5 @@ Idef0 +
 Classes (6,7) (**new**)
 
 graphs(**new**) 
+
+trees(**new**)
