@@ -38,6 +38,8 @@ trees(**new**)
 
 KMP and BM(**new**)
 
+Многофаз.(**new**)
+
 HashTable(**new**)
 
 
