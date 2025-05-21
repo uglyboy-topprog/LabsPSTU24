@@ -37,3 +37,5 @@ graphs(**new**)
 trees(**new**)
 
 KMP and BM(**new**)
+
+HashTable(**new**)
