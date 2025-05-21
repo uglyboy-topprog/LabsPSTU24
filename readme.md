@@ -26,10 +26,10 @@ Sorting methods ( Сортировка Шелла, Быстрая сортиро
 
 Lab_9 +
 
-Searches (**new**)  
+Searches + 
 
 Idef0 +
 
-Classes (1-5) (**new**)
+Classes (6,7) (**new**)
 
-graphs(**new**) +
+graphs(**new**) 
