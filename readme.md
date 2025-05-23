@@ -41,6 +41,7 @@ KMP and BM(**new**)
 Многофаз.(**new**)
 
 Коммивояжер(**new**)
+
 HashTable(**new**)
 
 
