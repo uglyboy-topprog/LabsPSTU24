@@ -30,7 +30,7 @@ Searches +
 
 Idef0 +
 
-Classes (6,7) (**new**)
+Classes (**new**)
 
 graphs(**new**) 
 
@@ -44,4 +44,5 @@ KMP and BM(**new**)
 
 HashTable(**new**)
 
+Все лабы сделаны, или, почти или не сделаны...((
 
